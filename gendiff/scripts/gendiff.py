@@ -1,8 +1,21 @@
 #!/usr/bin/env python3
 
 
+import argparse
+
+
 def main():
-    print('Test of gendiff script')
+    parser = argparse.ArgumentParser(
+        prog='gendiff',
+        description='Compares two configuration files and shows a difference.')
+    parser.add_argument('first_file', nargs=1, type=str)
+    parser.add_argument('second_file', nargs=1, type=str)
+    # parser.add_argument('first_file', nargs=1, type=argparse.FileType('r'))
+    # parser.add_argument('second_file', nargs=1, type=argparse.FileType('r'))
+    args = parser.parse_args()
+    # print(args)
+    print(f'first_file = {args.first_file[0]}')
+    print(f'second_file = {args.second_file[0]}')
 
 
 if __name__ == '__main__':
