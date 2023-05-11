@@ -11,5 +11,5 @@ lint:
 run-help-gendiff:
 	poetry run python -m gendiff.scripts.gendiff -h
 run-gendiff:
-	poetry run python -m gendiff.scripts.gendiff file_1 file_2
+	poetry run python -m gendiff.scripts.gendiff files/file1.json files/file2.json
 
