@@ -15,7 +15,7 @@ check:
 	poetry run flake8 tests
 	poetry run pytest -v
 test-coverage:
-	poetry run pytest --cov=gendiff
+	poetry run pytest --cov
 run-gendiff-h:
 	poetry run python -m gendiff.scripts.gendiff -h
 run-gendiff-12:
