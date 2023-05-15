@@ -8,8 +8,23 @@ package-install:
 	python3 -m pip install --user dist/*.whl
 lint:
 	poetry run flake8 gendiff
-run-help-gendiff:
+test:
+	poetry run pytest -v
+check:
+	poetry run flake8 gendiff
+	poetry run flake8 tests
+	poetry run pytest -v
+test-coverage:
+	poetry run pytest --cov=gendiff
+run-gendiff-h:
 	poetry run python -m gendiff.scripts.gendiff -h
-run-gendiff:
-	poetry run python -m gendiff.scripts.gendiff files/file1.json files/file2.json
-
+run-gendiff-12:
+	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file1.json tests/fixtures/file2.json
+run-gendiff-21:
+	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file2.json tests/fixtures/file1.json
+gendiff-h:
+	gendiff -h
+gendiff-12:
+	gendiff tests/fixtures/file1.json tests/fixtures/file2.json
+gendiff-21:
+	gendiff tests/fixtures/file2.json tests/fixtures/file1.json

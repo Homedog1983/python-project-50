@@ -5,7 +5,7 @@ import argparse
 from gendiff import generate_diff
 
 
-def get_cli_args() -> tuple:
+def get_args_from_cli_script_launch() -> tuple:
     parser = argparse.ArgumentParser(
         prog='gendiff',
         description='Compares two configuration files and shows a difference.')
@@ -18,7 +18,7 @@ def get_cli_args() -> tuple:
 
 
 def main():
-    _, file_path1, file_path2 = get_cli_args()
+    _, file_path1, file_path2 = get_args_from_cli_script_launch()
     diff = generate_diff(file_path1, file_path2)
     print(diff)
 

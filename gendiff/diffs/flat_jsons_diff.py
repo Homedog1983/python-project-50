@@ -10,6 +10,12 @@ def get_dict_from_json(path1) -> dict:
         return {}
 
 
+def converted_to_json_str(value) -> str:
+    if type(value) == bool:
+        return f'{value}'.lower()
+    return f'{value}'
+
+
 def get_flat_jsons_diff(path1, path2) -> str:
     dict1 = get_dict_from_json(path1)
     dict2 = get_dict_from_json(path2)
@@ -25,13 +31,13 @@ def get_flat_jsons_diff(path1, path2) -> str:
             value1 = dict1[key]
             value2 = dict2[key]
             if value1 == value2:
-                result += [f'    {key}: {value1}']
+                result += [f'    {key}: {converted_to_json_str(value1)}']
             else:
-                result += [f'  - {key}: {value1}']
-                result += [f'  + {key}: {value2}']
+                result += [f'  - {key}: {converted_to_json_str(value1)}']
+                result += [f'  + {key}: {converted_to_json_str(value2)}']
         elif key in keys1:
-            result += [f'  - {key}: {dict1[key]}']
+            result += [f'  - {key}: {converted_to_json_str(dict1[key])}']
         else:
-            result += [f'  + {key}: {dict2[key]}']
+            result += [f'  + {key}: {converted_to_json_str(dict2[key])}']
     result += ['}']
     return '\n'.join(result)
