@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexlet-code"
-version = "0.3.3"
+version = "0.4.0"
 description = ""
 authors = ["Evgeny Sokolov <sokolovsolod@gmail.com>"]
 readme = "README.md"
@@ -21,6 +21,8 @@ python = "^3.10"
 flake8 = "^6.0.0"
 pytest = "^7.3.1"
 pytest-cov = "^4.0.0"
+pyyaml = "^6.0"
+
 
 [build-system]
 requires = ["poetry-core"]

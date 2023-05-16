@@ -2,3 +2,4 @@
 + poetry add -G dev flake8
 + poetry add -G dev pytest
 + poetry add -G dev pytest-cov
++ poetry add -G dev pyYAML

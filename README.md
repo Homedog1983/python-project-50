@@ -7,5 +7,7 @@
 #### This is my second educational project on the [Hexlet platform](https://hexlet.io) (specialty: Python developer).  
 #### It represents Difference generator of two files
 #### See the videos below for all gendiffs
-### Gendiff of flat jsons 
+### Gendiff of flat jsons
 [![asciicast](https://asciinema.org/a/584018.svg)](https://asciinema.org/a/584018)
+### Gendiff of flat yamls (or yaml-json)
+[![asciicast](https://asciinema.org/a/585270.svg)](https://asciinema.org/a/585270)
