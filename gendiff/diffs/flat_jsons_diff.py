@@ -39,5 +39,5 @@ def get_flat_jsons_diff(path1, path2) -> str:
             result += [f'  - {key}: {converted_to_json_str(dict1[key])}']
         else:
             result += [f'  + {key}: {converted_to_json_str(dict2[key])}']
-    result += ['}']
+    result += ['}\n']
     return '\n'.join(result)
