@@ -1,20 +1,20 @@
-def make_line(key, value='', sign=' '):
-    """Return line node."""
+def make_line(key, value='', sign=' ', is_updated=False):
     return {
         'key': key,
         'value': value,
         'sign': sign,
-        'type': 'line'
+        'type': 'line',
+        'is_updated': is_updated
     }
 
 
-def make_diff(key='', children=[], sign=' '):
-    """Return diff node."""
+def make_diff(key='', children=[], sign=' ', is_updated=False):
     return {
         'key': key,
         'children': children,
         'sign': sign,
-        'type': 'diff'
+        'type': 'diff',
+        'is_updated': is_updated
     }
 
 
@@ -24,6 +24,10 @@ def is_diff(node):
 
 def is_line(node):
     return node['type'] == 'line'
+
+
+def is_updated(node):
+    return node['is_updated']
 
 
 def get_key(node):

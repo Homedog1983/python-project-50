@@ -20,7 +20,8 @@ def paths():
           'json2_nested': 'tests/fixtures/file2_nested.json',
           'yaml1_nested': 'tests/fixtures/file1_nested.yaml',
           'yaml2_nested': 'tests/fixtures/file2_nested.yaml',
-          'nested_diff12': 'tests/fixtures/nested_diff12.txt'
+          'nested_diff12': 'tests/fixtures/nested_diff12.txt',
+          'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt'
           }
     return paths
 
@@ -34,6 +35,8 @@ def expected_diffs(paths):
         diffs['21'] = diff21.read()
     with open(paths['nested_diff12']) as nested_diff12:
         diffs['nested_12'] = nested_diff12.read()
+    with open(paths['nested_diff12_plain']) as nested_diff12_plain:
+        diffs['nested_12_plain'] = nested_diff12_plain.read()
     diffs['wrong'] = "No supported file(s). Check the types/paths of them!"
     return diffs
 
@@ -85,13 +88,14 @@ def expected_diffs(paths):
 
 
 def test_get_nested_diff(paths, expected_diffs):
+    # format_name = 'stylish'
     # plain-json-json
     result = get_nested_diff(paths['json1'], paths['json2'])
     assert result == expected_diffs['12']
     result = get_nested_diff(paths['json2'], paths['json1'])
     assert result == expected_diffs['21']
     # yml-yml-yaml
-    result = get_nested_diff(paths['yml1'], paths['yml2'])
+    result = get_nested_diff(paths['yml1'], paths['yml2'], 'stylish')
     assert result == expected_diffs['12']
     result = get_nested_diff(paths['yml2'], paths['yml1'])
     assert result == expected_diffs['21']
@@ -105,7 +109,7 @@ def test_get_nested_diff(paths, expected_diffs):
     result = get_nested_diff(paths['yaml2'], paths['json1'])
     assert result == expected_diffs['21']
     # wrongs
-    result = get_nested_diff(paths['not_exist'], paths['json1'])
+    result = get_nested_diff(paths['not_exist'], paths['json1'], 'stylish')
     assert result == expected_diffs['wrong']
     result = get_nested_diff(paths['wrong_type'], paths['json2'])
     assert result == expected_diffs['wrong']
@@ -116,3 +120,17 @@ def test_get_nested_diff(paths, expected_diffs):
     # nested-json-json
     result = get_nested_diff(paths['json1_nested'], paths['json2_nested'])
     assert result == expected_diffs['nested_12']
+
+    # format_name = 'plain'
+    result = get_nested_diff(
+        paths['json1_nested'], paths['json2_nested'], 'plain')
+    assert result == expected_diffs['nested_12_plain']
+    result = get_nested_diff(
+        paths['yaml1_nested'], paths['json2_nested'], 'plain')
+    assert result == expected_diffs['nested_12_plain']
+    result = get_nested_diff(
+        paths['json1_nested'], paths['yaml2_nested'], 'plain')
+    assert result == expected_diffs['nested_12_plain']
+    result = get_nested_diff(
+        paths['yaml1_nested'], paths['yaml2_nested'], 'plain')
+    assert result == expected_diffs['nested_12_plain']

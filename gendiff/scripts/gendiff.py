@@ -5,21 +5,21 @@ import argparse
 from gendiff import generate_diff
 
 
-def get_args_from_cli_script_launch() -> tuple:
+def get_args_after_launch() -> tuple:
     parser = argparse.ArgumentParser(
         prog='gendiff',
         description='Compares two configuration files and shows a difference.')
-    parser.add_argument('-f', '--format', nargs=1, type=str, default=['plain'],
-                        help='set format of output')
-    parser.add_argument('first_file', nargs=1, type=str)
-    parser.add_argument('second_file', nargs=1, type=str)
+    parser.add_argument('-f', '--format', type=str,
+                        default='stylish', help='set format of output')
+    parser.add_argument('first_file', type=str)
+    parser.add_argument('second_file', type=str)
     args = parser.parse_args()
-    return args.format[0], args.first_file[0], args.second_file[0]
+    return args.format, args.first_file, args.second_file
 
 
 def main():
-    _, file_path1, file_path2 = get_args_from_cli_script_launch()
-    diff = generate_diff(file_path1, file_path2)
+    format_name, file_path1, file_path2 = get_args_after_launch()
+    diff = generate_diff(file_path1, file_path2, format_name)
     print(diff)
 
 

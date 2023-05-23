@@ -1,5 +1,5 @@
 from gendiff.diff_abstraction import make_diff, make_line
-from gendiff.stylish import stringify
+from gendiff.views.stylish import stringify
 import pytest
 
 
