@@ -9,7 +9,7 @@ def get_args_from_cli_script_launch() -> tuple:
     parser = argparse.ArgumentParser(
         prog='gendiff',
         description='Compares two configuration files and shows a difference.')
-    parser.add_argument('-f', '--format', nargs=1, type=str, default=['flat'],
+    parser.add_argument('-f', '--format', nargs=1, type=str, default=['plain'],
                         help='set format of output')
     parser.add_argument('first_file', nargs=1, type=str)
     parser.add_argument('second_file', nargs=1, type=str)

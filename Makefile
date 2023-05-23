@@ -21,5 +21,5 @@ run-gendiff-1:
 	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file1.json tests/fixtures/file2.json
 run-gendiff-2:
 	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file2.yaml tests/fixtures/file1.yml
-run-gendiff-3:
-	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file1.json tests/fixtures/file2.yml
+run-gendiff-nested:
+	poetry run python -m gendiff.scripts.gendiff tests/fixtures/file1_nested.json tests/fixtures/file2_nested.yaml

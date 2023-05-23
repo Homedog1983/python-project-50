@@ -11,3 +11,5 @@
 [![asciicast](https://asciinema.org/a/584018.svg)](https://asciinema.org/a/584018)
 ### Gendiff of flat yamls (or yaml-json)
 [![asciicast](https://asciinema.org/a/585270.svg)](https://asciinema.org/a/585270)
+### Gendiff of nested json and yaml
+[![asciicast](https://asciinema.org/a/586678.svg)](https://asciinema.org/a/586678)
