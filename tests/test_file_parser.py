@@ -5,14 +5,14 @@ from gendiff.file_parser import get_dict_from_file
 @pytest.fixture
 def paths():
     paths = {
-          'json1': 'tests/fixtures/file1.json',
-          'json2': 'tests/fixtures/file2.json',
-          'yml1': 'tests/fixtures/file1.yml',
-          'yml2': 'tests/fixtures/file2.yml',
-          'yaml2': 'tests/fixtures/file2.yaml',
-          'not_exist': 'tests/fixtures/f.json',
-          'wrong_type': 'tests/fixtures/wrong_type.txt'
-          }
+        'json1': 'tests/fixtures/file1.json',
+        'json2': 'tests/fixtures/file2.json',
+        'yml1': 'tests/fixtures/file1.yml',
+        'yml2': 'tests/fixtures/file2.yml',
+        'yaml2': 'tests/fixtures/file2.yaml',
+        'not_exist': 'tests/fixtures/f.json',
+        'wrong_type': 'tests/fixtures/wrong_type.txt'
+    }
     return paths
 
 
@@ -23,12 +23,12 @@ def expected_dicts():
         "timeout": 50,
         "proxy": "123.234.53.22",
         "follow": False
-        }
+    }
     dict2 = {
         "timeout": 20,
         "verbose": True,
         "host": "hexlet.io"
-        }
+    }
     return {'1': dict1, '2': dict2, 'empty': {}}
 
 

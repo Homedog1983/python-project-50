@@ -7,23 +7,23 @@ from gendiff.generate_diff import get_nested_diff
 @pytest.fixture
 def paths():
     paths = {
-          'json1': 'tests/fixtures/file1.json',
-          'json2': 'tests/fixtures/file2.json',
-          'yml1': 'tests/fixtures/file1.yml',
-          'yml2': 'tests/fixtures/file2.yml',
-          'yaml2': 'tests/fixtures/file2.yaml',
-          'not_exist': 'tests/fixtures/f.json',
-          'wrong_type': 'tests/fixtures/wrong_type.txt',
-          'diff12': 'tests/fixtures/flat_diff12.txt',
-          'diff21': 'tests/fixtures/flat_diff21.txt',
-          'json1_nested': 'tests/fixtures/file1_nested.json',
-          'json2_nested': 'tests/fixtures/file2_nested.json',
-          'yaml1_nested': 'tests/fixtures/file1_nested.yaml',
-          'yaml2_nested': 'tests/fixtures/file2_nested.yaml',
-          'nested_diff12': 'tests/fixtures/nested_diff12.txt',
-          'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt',
-          'nested_diff12_json': 'tests/fixtures/nested_diff12_json.txt'
-          }
+        'json1': 'tests/fixtures/file1.json',
+        'json2': 'tests/fixtures/file2.json',
+        'yml1': 'tests/fixtures/file1.yml',
+        'yml2': 'tests/fixtures/file2.yml',
+        'yaml2': 'tests/fixtures/file2.yaml',
+        'not_exist': 'tests/fixtures/f.json',
+        'wrong_type': 'tests/fixtures/wrong_type.txt',
+        'diff12': 'tests/fixtures/flat_diff12.txt',
+        'diff21': 'tests/fixtures/flat_diff21.txt',
+        'json1_nested': 'tests/fixtures/file1_nested.json',
+        'json2_nested': 'tests/fixtures/file2_nested.json',
+        'yaml1_nested': 'tests/fixtures/file1_nested.yaml',
+        'yaml2_nested': 'tests/fixtures/file2_nested.yaml',
+        'nested_diff12': 'tests/fixtures/nested_diff12.txt',
+        'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt',
+        'nested_diff12_json': 'tests/fixtures/nested_diff12_json.txt'
+    }
     return paths
 
 
