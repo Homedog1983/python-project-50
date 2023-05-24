@@ -15,3 +15,5 @@
 [![asciicast](https://asciinema.org/a/586678.svg)](https://asciinema.org/a/586678)
 ### Gendiff of nested json and yaml in 'plain' format
 [![asciicast](https://asciinema.org/a/586834.svg)](https://asciinema.org/a/586834)
+### Gendiff of nested json and yaml in 'json' format
+[![asciicast](https://asciinema.org/a/586963.svg)](https://asciinema.org/a/586963)

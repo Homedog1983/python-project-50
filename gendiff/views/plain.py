@@ -44,12 +44,12 @@ def stringify(tree):
             sign = get_sign(sub_node)
             sub_path = f"{path}.{sub_key}"
             if sign != ' ':
-                if not is_updated(sub_node):
-                    lines.append(
-                        get_line_of_moved(sub_node, sub_path))
-                else:
+                if is_updated(sub_node):
                     lines.append(
                         get_line_of_updated(sub_node, updated_stack, sub_path))
+                else:
+                    lines.append(
+                        get_line_of_moved(sub_node, sub_path))
             elif is_diff(sub_node):
                 walk(sub_node, sub_path)
     walk(tree)

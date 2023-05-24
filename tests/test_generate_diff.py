@@ -21,7 +21,8 @@ def paths():
           'yaml1_nested': 'tests/fixtures/file1_nested.yaml',
           'yaml2_nested': 'tests/fixtures/file2_nested.yaml',
           'nested_diff12': 'tests/fixtures/nested_diff12.txt',
-          'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt'
+          'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt',
+          'nested_diff12_json': 'tests/fixtures/nested_diff12_json.txt'
           }
     return paths
 
@@ -37,54 +38,10 @@ def expected_diffs(paths):
         diffs['nested_12'] = nested_diff12.read()
     with open(paths['nested_diff12_plain']) as nested_diff12_plain:
         diffs['nested_12_plain'] = nested_diff12_plain.read()
+    with open(paths['nested_diff12_json']) as nested_diff12_json:
+        diffs['nested_12_json'] = nested_diff12_json.read()
     diffs['wrong'] = "No supported file(s). Check the types/paths of them!"
     return diffs
-
-
-# def test_get_plain_diff_line():
-#     result = get_plain_diff_line('1', True)
-#     assert result == '    1: true'
-#     result = get_plain_diff_line('1', None)
-#     assert result == '    1: null'
-#     result = get_plain_diff_line('2', False, '+')
-#     assert result == '  + 2: false'
-#     result = get_plain_diff_line('3', 'True', '-')
-#     assert result == '  - 3: True'
-#     result = get_plain_diff_line('4', 15)
-#     assert result == '    4: 15'
-#     result = get_plain_diff_line('5', 'any line', '-')
-#     assert result == '  - 5: any line'
-
-
-# def test_get_plain_diff(paths, expected_diffs):
-#     # json-json
-#     result = get_plain_diff(paths['json1'], paths['json2'])
-#     assert result == expected_diffs['12']
-#     result = get_plain_diff(paths['json2'], paths['json1'])
-#     assert result == expected_diffs['21']
-#     # yml-yml-yaml
-#     result = get_plain_diff(paths['yml1'], paths['yml2'])
-#     assert result == expected_diffs['12']
-#     result = get_plain_diff(paths['yml2'], paths['yml1'])
-#     assert result == expected_diffs['21']
-#     result = get_plain_diff(paths['yml1'], paths['yaml2'])
-#     assert result == expected_diffs['12']
-#     result = get_plain_diff(paths['yaml2'], paths['yml1'])
-#     assert result == expected_diffs['21']
-#     # yml-json
-#     result = get_plain_diff(paths['yml1'], paths['json2'])
-#     assert result == expected_diffs['12']
-#     result = get_plain_diff(paths['yaml2'], paths['json1'])
-#     assert result == expected_diffs['21']
-#     # wrongs
-#     result = get_plain_diff(paths['not_exist'], paths['json1'])
-#     assert result == expected_diffs['wrong']
-#     result = get_plain_diff(paths['wrong_type'], paths['json2'])
-#     assert result == expected_diffs['wrong']
-#     result = get_plain_diff(paths['not_exist'], paths['yml1'])
-#     assert result == expected_diffs['wrong']
-#     result = get_plain_diff(paths['wrong_type'], paths['yaml2'])
-#     assert result == expected_diffs['wrong']
 
 
 def test_get_nested_diff(paths, expected_diffs):
@@ -134,3 +91,17 @@ def test_get_nested_diff(paths, expected_diffs):
     result = get_nested_diff(
         paths['yaml1_nested'], paths['yaml2_nested'], 'plain')
     assert result == expected_diffs['nested_12_plain']
+
+    # format_name = 'json'
+    result = get_nested_diff(
+        paths['json1_nested'], paths['json2_nested'], 'json')
+    assert result == expected_diffs['nested_12_json']
+    result = get_nested_diff(
+        paths['yaml1_nested'], paths['json2_nested'], 'json')
+    assert result == expected_diffs['nested_12_json']
+    result = get_nested_diff(
+        paths['json1_nested'], paths['yaml2_nested'], 'json')
+    assert result == expected_diffs['nested_12_json']
+    result = get_nested_diff(
+        paths['yaml1_nested'], paths['yaml2_nested'], 'json')
+    assert result == expected_diffs['nested_12_json']

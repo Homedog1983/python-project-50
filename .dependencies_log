@@ -1,5 +1,6 @@
-# poetry add log:
+# poetry log:
+poetry config virtualenvs.in-project true
 + poetry add -G dev flake8
 + poetry add -G dev pytest
 + poetry add -G dev pytest-cov
-+ poetry add -G dev pyYAML
++ poetry add pyYAML

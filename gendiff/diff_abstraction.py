@@ -38,8 +38,8 @@ def get_value(line):
     return line.get('value', '')
 
 
-def get_children(diff):
-    return diff.get('children', [])
+def get_children(node):
+    return node.get('children', [])
 
 
 def get_sign(node):

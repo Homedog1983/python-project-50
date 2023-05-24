@@ -2,6 +2,7 @@ from gendiff.file_parser import get_dict_from_file
 from gendiff.diff_abstraction import make_diff, make_line
 import gendiff.views.stylish as stylish
 import gendiff.views.plain as plain
+import gendiff.views.json_format as json_format
 
 
 def get_mapping_to_diff(key, data, sign=' ', is_updated=False):
@@ -42,8 +43,10 @@ def get_nested_diff(path1, path2, format_name='stylish'):
         return 'No supported file(s). Check the types/paths of them!'
     if format_name == 'stylish':
         formatter = stylish
-    else:
+    elif format_name == 'plain':
         formatter = plain
+    else:
+        formatter = json_format
     diff_tree = get_diff_of_dicts(dict1, dict2)
     diff = formatter.stringify(diff_tree)
     return diff
