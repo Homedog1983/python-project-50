@@ -2,7 +2,7 @@ from gendiff.diff_abstraction import is_line
 from gendiff.diff_abstraction import get_key, get_value, get_children, get_sign
 
 
-def get_formatted(value) -> str:
+def get_formatted(value):
     if value is None:
         return 'null'
     elif isinstance(value, bool):
@@ -10,7 +10,7 @@ def get_formatted(value) -> str:
     return str(value)
 
 
-def replaced(key, sign=' ', level=0, replacer=' ', replacer_per_level=4) -> str:
+def get_replaced(key, sign=' ', level=0, replacer=' ', replacer_per_level=4):
     signs_to_key = replacer_per_level * level
     replacer_to_bracket = replacer * signs_to_key
     replacer_to_sign = replacer * (signs_to_key - 2)
@@ -22,20 +22,20 @@ def replaced(key, sign=' ', level=0, replacer=' ', replacer_per_level=4) -> str:
 def stringify(tree):
     lines = ['{']
 
-    def walk(node, level=0):
+    def add_lines_from(node, level=0):
         children = get_children(node)
         for sub_node in children:
             key = get_key(sub_node)
             sign = get_sign(sub_node)
             next_level = level + 1
-            replaced_key, replaced_bracket = replaced(key, sign, next_level)
+            replaced_key, replaced_bracket = get_replaced(key, sign, next_level)
             if is_line(sub_node):
                 value = get_value(sub_node)
                 lines.append(f"{replaced_key}: {get_formatted(value)}")
             else:
                 lines.append(f"{replaced_key}: " + "{")
-                walk(sub_node, next_level)
+                add_lines_from(sub_node, next_level)
                 lines.append(f"{replaced_bracket}")
-    walk(tree)
+    add_lines_from(tree)
     lines.append('}')
     return '\n'.join(lines)

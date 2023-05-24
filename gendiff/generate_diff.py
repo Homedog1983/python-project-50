@@ -5,12 +5,12 @@ import gendiff.views.plain as plain
 import gendiff.views.json_format as json_format
 
 
-def get_mapping_to_diff(key, data, sign=' ', is_updated=False):
+def get_diff_from_dict(key, data, sign=' ', is_updated=False):
     if not isinstance(data, dict):
         return make_line(key, data, sign, is_updated)
     children = []
     for sub_key, sub_data in data.items():
-        children.append(get_mapping_to_diff(sub_key, sub_data))
+        children.append(get_diff_from_dict(sub_key, sub_data))
     return make_diff(key, children, sign, is_updated)
 
 
@@ -22,17 +22,17 @@ def get_diff_of_dicts(dict1, dict2, key=''):
         value1 = dict1.get(sub_key)
         value2 = dict2.get(sub_key)
         if sub_key not in dict2:
-            children.append(get_mapping_to_diff(sub_key, value1, '-'))
+            children.append(get_diff_from_dict(sub_key, value1, '-'))
         elif sub_key not in dict1:
-            children.append(get_mapping_to_diff(sub_key, value2, '+'))
+            children.append(get_diff_from_dict(sub_key, value2, '+'))
         else:
             if value1 == value2:
-                children.append(get_mapping_to_diff(sub_key, value1))
+                children.append(get_diff_from_dict(sub_key, value1))
             elif isinstance(value1, dict) and isinstance(value2, dict):
                 children.append(get_diff_of_dicts(value1, value2, sub_key))
             else:
-                children.append(get_mapping_to_diff(sub_key, value1, '-', True))
-                children.append(get_mapping_to_diff(sub_key, value2, '+', True))
+                children.append(get_diff_from_dict(sub_key, value1, '-', True))
+                children.append(get_diff_from_dict(sub_key, value2, '+', True))
     return make_diff(key, children)
 
 
