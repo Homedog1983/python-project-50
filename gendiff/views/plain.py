@@ -16,18 +16,6 @@ def get_formatted_value(node):
     return '[complex value]'
 
 
-# def get_formatted_value(node):
-#     if is_line(node):
-#         value = get_value(node)
-#         if value is None:
-#             return 'null'
-#         elif isinstance(value, bool):
-#             return str(value).lower()
-#         else:
-#             return f"'{str(value)}'"
-#     return '[complex value]'
-
-
 def get_line_of_moved(node, path=''):
     result = [f"Property '{path[1:]}' was "]
     if get_sign(node) == '-':
