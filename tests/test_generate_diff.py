@@ -105,3 +105,7 @@ def test_get_nested_diff(paths, expected_diffs):
     result = get_nested_diff(
         paths['yaml1_nested'], paths['yaml2_nested'], 'json')
     assert result == expected_diffs['nested_12_json']
+
+    # anu word in format -> stylish on default
+    result = get_nested_diff(paths['json1_nested'], paths['json2_nested'], 'sdsd')
+    assert result == expected_diffs['nested_12']
