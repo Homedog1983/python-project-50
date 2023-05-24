@@ -14,23 +14,28 @@ def replaced(key, sign=' ', level=0, replacer=' ', replacer_per_level=4) -> str:
     signs_to_key = replacer_per_level * level
     replacer_to_bracket = replacer * signs_to_key
     replacer_to_sign = replacer * (signs_to_key - 2)
-    replaced_key = f"{replacer_to_sign}{sign} {get_formatted(key)}: "
-    replaced_key_with_zero_factor = replaced_key * int(bool(level))
-    replaced_bracket = f"{replacer_to_bracket}" * int(bool(level)) + "}"
-    return replaced_key_with_zero_factor, replaced_bracket
+    replaced_key = f"{replacer_to_sign}{sign} {get_formatted(key)}"
+    replaced_bracket = f"{replacer_to_bracket}" + "}"
+    return replaced_key, replaced_bracket
 
 
-def stringify(obj, level=0) -> str:
-    key = get_key(obj)
-    sign = get_sign(obj)
-    replaced_key, replaced_bracket = replaced(key, sign, level)
-    if is_line(obj):
-        value = get_value(obj)
-        return replaced_key + f"{get_formatted(value)}"
-    else:
-        children = get_children(obj)
-        lines = [replaced_key + "{"]
-        for obj in children:
-            lines.append(f"{stringify(obj, level + 1)}")
-    lines.append(replaced_bracket)
+def stringify(tree):
+    lines = ['{']
+
+    def walk(node, level=0):
+        children = get_children(node)
+        for sub_node in children:
+            key = get_key(sub_node)
+            sign = get_sign(sub_node)
+            next_level = level + 1
+            replaced_key, replaced_bracket = replaced(key, sign, next_level)
+            if is_line(sub_node):
+                value = get_value(sub_node)
+                lines.append(f"{replaced_key}: {get_formatted(value)}")
+            else:
+                lines.append(f"{replaced_key}: " + "{")
+                walk(sub_node, next_level)
+                lines.append(f"{replaced_bracket}")
+    walk(tree)
+    lines.append('}')
     return '\n'.join(lines)
