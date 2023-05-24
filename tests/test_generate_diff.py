@@ -19,12 +19,12 @@ def params():
     }
 
     diff_paths = {
-            'diff12': 'tests/fixtures/flat_diff12.txt',
-            'diff21': 'tests/fixtures/flat_diff21.txt',
-            'nested_diff12': 'tests/fixtures/nested_diff12.txt',
-            'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt',
-            'nested_diff12_json': 'tests/fixtures/nested_diff12_json.txt'
-        }
+        'diff12': 'tests/fixtures/flat_diff12.txt',
+        'diff21': 'tests/fixtures/flat_diff21.txt',
+        'nested_diff12': 'tests/fixtures/nested_diff12.txt',
+        'nested_diff12_plain': 'tests/fixtures/nested_diff12_plain.txt',
+        'nested_diff12_json': 'tests/fixtures/nested_diff12_json.txt'
+    }
 
     diffs = {}
     with open(diff_paths['diff12']) as diff12:
