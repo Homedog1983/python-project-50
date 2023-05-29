@@ -3,7 +3,7 @@ from gendiff.generate_diff import get_nested_diff
 
 
 @pytest.mark.parametrize("path1, path2, format_name, diff_path", [
-    # # wrongs -> all formats)
+    # wrongs -> all formats)
     ('f.json', 'file1.json', 'sdf', 'wrong.txt'),
     ('wrong_type.txt', 'file2.json', 'plain', 'wrong.txt'),
     ('f.json', 'file1.json', 'json', 'wrong.txt'),
@@ -23,11 +23,11 @@ from gendiff.generate_diff import get_nested_diff
     ('file1_n.json', 'file2_n.json', 'df', 'nested_12s.txt'),
     ('file1_n.yaml', 'file2_n.yaml', 'stylish', 'nested_12s.txt'),
     ('file1_n.json', 'file2_n.yaml', '', 'nested_12s.txt'),
-    # # nested -> plain
+    # nested -> plain
     ('file1_n.json', 'file2_n.json', 'plain', 'nested_12p.txt'),
     ('file1_n.yaml', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
     ('file1_n.json', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
-    # # nested -> json
+    # nested -> json
     ('file1_n.json', 'file2_n.json', 'json', 'nested_12j.txt'),
     ('file1_n.yaml', 'file2_n.yaml', 'json', 'nested_12j.txt'),
     ('file1_n.json', 'file2_n.yaml', 'json', 'nested_12j.txt')

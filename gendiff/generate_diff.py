@@ -3,15 +3,6 @@ from gendiff.diff_abstraction import make_diff, make_line
 from gendiff.views.generate_veiw import get_view_from
 
 
-def get_node_from_item(key, data, sign=' ', is_updated=False):
-    if not isinstance(data, dict):
-        return make_line(key, data, sign, is_updated)
-    children = []
-    for sub_key, sub_data in data.items():
-        children.append(get_node_from_item(sub_key, sub_data))
-    return make_diff(key, children, sign, is_updated)
-
-
 def get_diff_from_dicts(dict1, dict2, key=''):
     union_keys = dict1.keys() | dict2.keys()
     sorted_keys = sorted(list(union_keys))
@@ -20,17 +11,20 @@ def get_diff_from_dicts(dict1, dict2, key=''):
         value1 = dict1.get(sub_key)
         value2 = dict2.get(sub_key)
         if sub_key not in dict2:
-            children.append(get_node_from_item(sub_key, value1, '-'))
+            children.append(make_line(sub_key, value1, 'removed'))
         elif sub_key not in dict1:
-            children.append(get_node_from_item(sub_key, value2, '+'))
+            children.append(make_line(sub_key, value2, 'added'))
         else:
             if value1 == value2:
-                children.append(get_node_from_item(sub_key, value1))
+                children.append(make_line(sub_key, value1))
             elif isinstance(value1, dict) and isinstance(value2, dict):
                 children.append(get_diff_from_dicts(value1, value2, sub_key))
             else:
-                children.append(get_node_from_item(sub_key, value1, '-', True))
-                children.append(get_node_from_item(sub_key, value2, '+', True))
+                value = {}
+                value['was'] = value1
+                value['is'] = value2
+                children.append(make_line(sub_key, value, 'updated'))
+
     return make_diff(key, children)
 
 
