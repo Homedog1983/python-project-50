@@ -2,18 +2,22 @@ from json import load as json_load
 from yaml import safe_load as yaml_load
 
 
-def get_parsed(path):
-    result_dict = {}
-    with open(path, "r") as file:
-        if path.endswith('.json'):
-            result_dict = json_load(file)
-        elif path.endswith('.yaml') or path.endswith('.yml'):
-            result_dict = yaml_load(file)
-    return result_dict
+def parse(content_file, parse_type):
+    parser = json_load if parse_type == 'json' else yaml_load
+    return parser(content_file)
 
 
-def get_dict_from_file(path) -> dict:
+def get_dict_from_file(path):
+    if path.endswith('.json'):
+        parse_type = 'json'
+    elif path.endswith('.yaml') or path.endswith('.yml'):
+        parse_type = 'yaml'
+    else:
+        return {}
     try:
-        return get_parsed(path)
+        with open(path) as file:
+            result_dict = parse(file, parse_type)
     except (OSError, ValueError):
         return {}
+
+    return result_dict

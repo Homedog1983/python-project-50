@@ -1,8 +1,6 @@
 from gendiff.file_parser import get_dict_from_file
 from gendiff.diff_abstraction import make_diff, make_line
-import gendiff.views.stylish as stylish
-import gendiff.views.plain as plain
-import gendiff.views.json_format as json_format
+from gendiff.views.generate_veiw import get_view_from
 
 
 def get_node_from_item(key, data, sign=' ', is_updated=False):
@@ -37,16 +35,10 @@ def get_diff_from_dicts(dict1, dict2, key=''):
 
 
 def get_nested_diff(path1, path2, format_name='stylish'):
-    formats = {
-        'stylish': stylish,
-        'plain': plain,
-        'json': json_format
-    }
-    formatter = formats.get(format_name, stylish)
     dict1 = get_dict_from_file(path1)
     dict2 = get_dict_from_file(path2)
     if dict1 == {} or dict2 == {}:
         return 'No supported file(s). Check the types/paths of them!'
     diff_tree = get_diff_from_dicts(dict1, dict2)
-    diff = formatter.stringify(diff_tree)
+    diff = get_view_from(diff_tree, format_name)
     return diff
