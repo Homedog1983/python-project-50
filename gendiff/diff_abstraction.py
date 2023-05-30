@@ -1,41 +1,18 @@
-def make_line(key, value='', status='unchanged'):
+def make_node(key, status, data='', children=[]):
     return {
         'key': key,
-        'value': value,
-        # if 'updated' -> value = {'was': .., 'is': ..}
         'status': status,
-        # 'unchanged', 'added', 'removed', 'updated'
-        'type': 'line',
+        # 'unchanged', 'added', 'removed', 'updated' - with not-empty data
+        # 'parent' - with not-empty children
+        'data': data,
+        # if 'updated' -> data = {'was': .., 'is': ..}
+        'children': children
     }
 
 
-def make_diff(key='', children=[]):
-    return {
-        'key': key,
-        'children': children,
-        'type': 'diff'
-    }
-
-
-def is_diff(node):
-    return node['type'] == 'diff'
-
-
-def is_line(node):
-    return node['type'] == 'line'
-
-
-def get_key(node):
-    return node['key']
-
-
-def get_value(node):
-    return node.get('value', '')
-
-
-def get_status(node):
-    return node.get('status', '')
-
-
-def get_children(node):
-    return node.get('children', [])
+# Function gets any property (or several in one tuple)
+# and hides abstraction internals
+def get_from(node, *property_names):
+    if len(property_names) == 1:
+        return node[property_names[0]]
+    return tuple(map(lambda name: node[name], property_names))

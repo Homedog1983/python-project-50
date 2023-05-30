@@ -1,28 +1,23 @@
-from gendiff.diff_abstraction import make_diff, make_line
-from gendiff.diff_abstraction import is_diff, is_line, get_status
-from gendiff.diff_abstraction import get_children, get_key, get_value
+from gendiff.diff_abstraction import make_node, get_from
 import pytest
 
 
 @pytest.fixture
 def objs():
-    children = [make_line('line_2', 'value2', 'removed')]
+    children = [make_node('data_key2', 'removed', data='data_2')]
     objs = {
-        'line': make_line('line_key', 'value', 'added'),
-        'diff': make_diff('diff_key', children=[]),
-        'tree': make_diff('tree_key', children=children)
+        'data': make_node('data_key1', 'added', data='data_1'),
+        'parent': make_node('parent_key', 'parent', children=children)
     }
     return objs
 
 
 def test_diff_abstraction(objs):
-    assert is_diff(objs['diff'])
-    assert is_line(objs['line'])
-    assert get_key(objs['diff']) == 'diff_key'
-    assert get_key(objs['line']) == 'line_key'
-    assert get_status(objs['line']) == 'added'
-    assert get_value(objs['line']) == 'value'
-    children = get_children(objs['tree'])
-    assert get_key(children[0]) == 'line_2'
-    assert is_line(children[0])
-    assert get_status(children[0]) == 'removed'
+    assert get_from(objs['data'], 'status') == 'added'
+    assert get_from(objs['data'], 'status', 'data') == ('added', 'data_1')
+    assert objs['data']['status'] == 'added'
+    assert objs['data']['children'] == []
+    assert objs['parent']['data'] == ''
+    assert objs['data']['key'] == 'data_key1'
+    assert objs['parent']['status'] == 'parent'
+    assert objs['parent']['children'][0]['key'] == 'data_key2'

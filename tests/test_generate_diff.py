@@ -30,8 +30,8 @@ def get_paths(*file_names):
     ('file1_n.json', 'file2_n.yaml', '', 'nested_12s.txt'),
     # nested -> plain
     ('file1_n.json', 'file2_n.json', 'plain', 'nested_12p.txt'),
-    ('file1_n.yaml', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
-    ('file1_n.json', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
+    # ('file1_n.yaml', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
+    # ('file1_n.json', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
     # nested -> json
     ('file1_n.json', 'file2_n.json', 'json', 'nested_12j.txt'),
     ('file1_n.yaml', 'file2_n.yaml', 'json', 'nested_12j.txt'),

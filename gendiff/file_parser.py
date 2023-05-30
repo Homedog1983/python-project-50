@@ -19,6 +19,7 @@ def get_dict_from_file(path):
     else:
         print("Unsupported file format")
         return result_dict
+
     try:
         with open(path) as content_file:
             result_dict = parse(content_file, parse_type)
