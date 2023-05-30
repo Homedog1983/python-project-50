@@ -5,7 +5,7 @@ from gendiff.diff_abstraction import get_key, get_value, get_children
 def to_str(value):
     if value is None:
         return 'null'
-    elif isinstance(value, bool):
+    if isinstance(value, bool):
         return str(value).lower()
     return str(value)
 

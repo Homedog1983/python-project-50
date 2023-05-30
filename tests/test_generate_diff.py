@@ -2,7 +2,12 @@ import pytest
 from gendiff.generate_diff import get_nested_diff
 
 
-@pytest.mark.parametrize("path1, path2, format_name, diff_path", [
+def get_paths(*file_names):
+    parent_path = 'tests/fixtures/'
+    return tuple(map(lambda name: f'{parent_path}{name}', file_names))
+
+
+@pytest.mark.parametrize("name_1, name_2, format_name, name_expected", [
     # wrongs -> all formats)
     ('f.json', 'file1.json', 'sdf', 'wrong.txt'),
     ('wrong_type.txt', 'file2.json', 'plain', 'wrong.txt'),
@@ -32,11 +37,8 @@ from gendiff.generate_diff import get_nested_diff
     ('file1_n.yaml', 'file2_n.yaml', 'json', 'nested_12j.txt'),
     ('file1_n.json', 'file2_n.yaml', 'json', 'nested_12j.txt')
 ])
-def test_get_nested_diff(path1, path2, format_name, diff_path):
-    fixtures = 'tests/fixtures/'
-    full_path1 = f'{fixtures}{path1}'
-    full_path2 = f'{fixtures}{path2}'
-    full_diff_path = f'{fixtures}{diff_path}'
-    with open(full_diff_path) as diff_file:
-        diff = diff_file.read()
-    assert get_nested_diff(full_path1, full_path2, format_name) == diff
+def test_get_nested_diff(name_1, name_2, format_name, name_expected):
+    path_1, path_2, path_expected = get_paths(name_1, name_2, name_expected)
+    with open(path_expected) as file_expected:
+        content_expected = file_expected.read()
+        assert get_nested_diff(path_1, path_2, format_name) == content_expected

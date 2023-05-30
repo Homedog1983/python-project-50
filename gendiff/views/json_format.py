@@ -27,5 +27,4 @@ def add_elems_to_dict_from(tree, tree_dict):
 def stringify(tree):
     tree_dict = {}
     add_elems_to_dict_from(tree, tree_dict)
-    diff = dumps(tree_dict, indent=4)
-    return diff
+    return dumps(tree_dict, indent=4)

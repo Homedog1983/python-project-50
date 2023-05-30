@@ -5,15 +5,13 @@ from gendiff.diff_abstraction import get_key, get_value, get_children
 def to_str(value):
     if isinstance(value, dict):
         return '[complex value]'
-    else:
-        if value is None:
-            return 'null'
-        elif isinstance(value, bool):
-            return str(value).lower()
-        elif isinstance(value, str):
-            return f"'{str(value)}'"
-        else:
-            return value
+    if value is None:
+        return 'null'
+    if isinstance(value, bool):
+        return str(value).lower()
+    if isinstance(value, str):
+        return f"'{str(value)}'"
+    return value
 
 
 def add_lines_from(tree, lines, path=''):

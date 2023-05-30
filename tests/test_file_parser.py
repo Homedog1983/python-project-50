@@ -1,34 +1,22 @@
 import pytest
 from gendiff.file_parser import get_dict_from_file
+from tests.test_generate_diff import get_paths
 
 
-@pytest.mark.parametrize("path, expected_dict", [
-    ('file1.json', 'dict_1'),
-    ('file2.json', 'dict_2'),
-    ('file1.yml', 'dict_1'),
-    ('file2.yml', 'dict_2'),
-    ('file1.yaml', 'dict_1'),
-    ('file2.yaml', 'dict_2'),
-    ('file2.yml', 'dict_2'),
-    ('file1.yaml', 'dict_1'),
-    ('wrong_type.txt', 'empty'),
-    ('f.json', 'empty')
+@pytest.mark.parametrize("name, name_expected", [
+    ('file1.json', 'dict_1.txt'),
+    ('file2.json', 'dict_2.txt'),
+    ('file1.yml', 'dict_1.txt'),
+    ('file2.yml', 'dict_2.txt'),
+    ('file1.yaml', 'dict_1.txt'),
+    ('file2.yaml', 'dict_2.txt'),
+    ('file2.yml', 'dict_2.txt'),
+    ('file1.yaml', 'dict_1.txt'),
+    ('wrong_type.txt', 'dict_empty.txt'),
+    ('f.json', 'dict_empty.txt')
 ])
-def test_get_dict_from_file(path, expected_dict):
-    full_path = f'tests/fixtures/{path}'
-    if expected_dict == 'dict_1':
-        expected = {
-            "host": "hexlet.io",
-            "timeout": 50,
-            "proxy": "123.234.53.22",
-            "follow": False
-        }
-    elif expected_dict == 'dict_2':
-        expected = {
-            "timeout": 20,
-            "verbose": True,
-            "host": "hexlet.io"
-        }
-    else:
-        expected = {}
-    assert get_dict_from_file(full_path) == expected
+def test_get_dict_from_file(name, name_expected):
+    path, path_expected = get_paths(name, name_expected)
+    with open(path_expected) as file_expected:
+        content_expected = eval(file_expected.read())
+        assert get_dict_from_file(path) == content_expected
