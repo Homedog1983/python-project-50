@@ -15,9 +15,9 @@ def objs():
 def test_diff_abstraction(objs):
     assert get_from(objs['data'], 'status') == 'added'
     assert get_from(objs['data'], 'status', 'data') == ('added', 'data_1')
-    assert objs['data']['status'] == 'added'
-    assert objs['data']['children'] == []
-    assert objs['parent']['data'] == ''
-    assert objs['data']['key'] == 'data_key1'
-    assert objs['parent']['status'] == 'parent'
-    assert objs['parent']['children'][0]['key'] == 'data_key2'
+    assert get_from(objs['data'], 'children') == []
+    assert get_from(objs['parent'], 'data') == ''
+    assert get_from(objs['data'], 'key') == 'data_key1'
+    assert get_from(objs['parent'], 'status') == 'parent'
+    assert get_from(
+        get_from(objs['parent'], 'children')[0], 'key') == 'data_key2'

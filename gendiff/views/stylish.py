@@ -1,12 +1,12 @@
 from gendiff.diff_abstraction import get_from
 
 
-def to_str(value):
-    if value is None:
+def to_str(data):
+    if data is None:
         return 'null'
-    if isinstance(value, bool):
-        return str(value).lower()
-    return str(value)
+    if isinstance(data, bool):
+        return str(data).lower()
+    return str(data)
 
 
 def get_sign_from(status):
@@ -14,7 +14,10 @@ def get_sign_from(status):
         'unchanged': ' ',
         'added': '+',
         'removed': '-',
-        'updated': {'was': '-', 'is': '+'},
+        'updated': {
+            'was': '-',
+            'is': '+'
+        },
         'parent': ' '
     }
     return signs.get(status, ' ')
@@ -27,20 +30,23 @@ def get_indents(level, replacer=' ', replacer_per_level=4):
     return indent_to_sign, indent_to_bracket
 
 
-def add_lines_from_elem(sign, key, data, level, lines):
+def get_lines_from_elem(sign, key, data, level):
+    lines = []
     sign_indent, bracket_indent = get_indents(level)
     line_start = f"{sign_indent}{sign} {to_str(key)}: "
     if not isinstance(data, dict):
-        lines.append(line_start + f"{to_str(data)}")
+        lines += [line_start + f"{to_str(data)}"]
     else:
-        lines.append(line_start + "{")
+        lines += [line_start + "{"]
         sign = get_sign_from('unchanged')
-        for sub_key, sub_value in data.items():
-            add_lines_from_elem(sign, sub_key, sub_value, level + 1, lines)
-        lines.append(f"{bracket_indent}" + '}')
+        for sub_key, sub_data in data.items():
+            lines += get_lines_from_elem(sign, sub_key, sub_data, level + 1)
+        lines += [f"{bracket_indent}" + '}']
+    return lines
 
 
-def add_lines_from(tree, level, lines):
+def get_lines_from(tree, level=0):
+    lines = []
     children = get_from(tree, 'children')
     level += 1
     for node in children:
@@ -48,19 +54,17 @@ def add_lines_from(tree, level, lines):
         sign = get_sign_from(status)
         if status == 'parent':
             _, bracket_indent = get_indents(level)
-            lines.append(f"{bracket_indent}{to_str(key)}: " + "{")
-            add_lines_from(node, level, lines)
-            lines.append(f"{bracket_indent}" + '}')
+            lines += [f"{bracket_indent}{to_str(key)}: " + "{"]
+            lines += get_lines_from(node, level)
+            lines += [f"{bracket_indent}" + '}']
             continue
         if status == 'updated':
-            add_lines_from_elem(sign['was'], key, data['was'], level, lines)
-            add_lines_from_elem(sign['is'], key, data['is'], level, lines)
+            lines += get_lines_from_elem(sign['was'], key, data['was'], level)
+            lines += get_lines_from_elem(sign['is'], key, data['is'], level)
             continue
-        add_lines_from_elem(sign, key, data, level, lines)
+        lines += get_lines_from_elem(sign, key, data, level)
+    return lines
 
 
 def stringify(tree):
-    lines = ['{']
-    add_lines_from(tree, 0, lines)
-    lines.append('}')
-    return '\n'.join(lines)
+    return '\n'.join(['{'] + get_lines_from(tree) + ['}'])

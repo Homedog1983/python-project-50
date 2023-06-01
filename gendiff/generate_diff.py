@@ -22,29 +22,16 @@ def get_diff_from_dicts(dict1, dict2, node_key=''):
         if isinstance(data_1, dict) and isinstance(data_2, dict):
             children.append(get_diff_from_dicts(data_1, data_2, key))
             continue
-        data = {}
-        data['was'] = data_1
-        data['is'] = data_2
+        data = {
+            'was': data_1,
+            'is': data_2
+        }
         children.append(make_node(key, 'updated', data))
-
     return make_node(node_key, 'parent', children=children)
 
 
 def get_nested_diff(path1, path2, format_name='stylish'):
     dict1 = get_dict_from_file(path1)
     dict2 = get_dict_from_file(path2)
-    if dict1 == {} or dict2 == {}:
-        return 'No supported file(s)'
     diff_tree = get_diff_from_dicts(dict1, dict2)
     return get_view_from(diff_tree, format_name)
-
-
-# I think it's better, but not understand how get None (not 'None')
-# from test fixture file
-#
-# def get_nested_diff(path1, path2, format_name='stylish'):
-#     dict1 = get_dict_from_file(path1)
-#     dict2 = get_dict_from_file(path2)
-#     if dict1 != {} and dict2 != {}:
-#         diff_tree = get_diff_from_dicts(dict1, dict2)
-#         return get_view_from(diff_tree, format_name)

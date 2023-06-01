@@ -1,18 +1,17 @@
+from os.path import dirname, abspath
 import pytest
 from gendiff.generate_diff import get_nested_diff
 
 
+TESTS_DIR = dirname(abspath(__file__))
+FIXTURES_PATH = f"{TESTS_DIR}/fixtures"
+
+
 def get_paths(*file_names):
-    parent_path = 'tests/fixtures/'
-    return tuple(map(lambda name: f'{parent_path}{name}', file_names))
+    return tuple(map(lambda name: f"{FIXTURES_PATH}/{name}", file_names))
 
 
 @pytest.mark.parametrize("name_1, name_2, format_name, name_expected", [
-    # wrongs -> all formats)
-    ('f.json', 'file1.json', 'sdf', 'wrong.txt'),
-    ('wrong_type.txt', 'file2.json', 'plain', 'wrong.txt'),
-    ('f.json', 'file1.json', 'json', 'wrong.txt'),
-    ('wrong_type.txt', 'file2.json', 'stylish', 'wrong.txt'),
     # flat-json-json -> stylish
     ('file1.json', 'file2.json', 'stylish', 'flat_diff12.txt'),
     ('file2.json', 'file1.json', 'dfdf', 'flat_diff21.txt'),

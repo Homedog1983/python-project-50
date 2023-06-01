@@ -13,30 +13,29 @@ def to_str(data):
     return data
 
 
-def add_lines_from(tree, lines, path=''):
+def get_lines_from(tree, path=''):
+    lines = []
     children = get_from(tree, 'children')
     for node in children:
         key, status, data = get_from(node, 'key', 'status', 'data')
         next_path = f"{path}.{key}"
         line_start = f"Property '{next_path[1:]}' was"
         if status == 'removed':
-            lines.append(f'{line_start} removed')
+            lines += [f'{line_start} removed']
             continue
         if status == 'added':
-            lines.append(f'{line_start} added with value: {to_str(data)}')
+            lines += [f'{line_start} added with value: {to_str(data)}']
             continue
         if status == 'updated':
             data_1 = to_str(data['was'])
             data_2 = to_str(data['is'])
-            lines.append(
-                f'{line_start} updated. From {data_1} to {data_2}')
+            lines += [f'{line_start} updated. From {data_1} to {data_2}']
             continue
         if status == 'unchanged':
             continue
-        add_lines_from(node, lines, next_path)
+        lines += get_lines_from(node, next_path)
+    return lines
 
 
 def stringify(tree):
-    tree_lines = []
-    add_lines_from(tree, tree_lines)
-    return '\n'.join(tree_lines)
+    return '\n'.join(get_lines_from(tree))
