@@ -10,7 +10,15 @@ def make_node(key, status, data='', children=[]):
     }
 
 
-def get_from(node, *property_names):
+def get_properties_from(node, *property_names):
     if len(property_names) == 1:
         return node[property_names[0]]
     return tuple(map(lambda name: node[name], property_names))
+
+
+# v 0.9.1
+#
+# def get_from(node, *property_names):
+#     if len(property_names) == 1:
+#         return node[property_names[0]]
+#     return tuple(map(lambda name: node[name], property_names))

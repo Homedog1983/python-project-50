@@ -1,29 +1,24 @@
 from json import load as json_load
-from json.decoder import JSONDecodeError
 from yaml import safe_load as yaml_load
-from yaml.parser import ParserError
+from os.path import splitext
 
 
-def parse(content_file, parse_type):
-    if parse_type == 'json':
-        parser = json_load
-    elif parse_type == 'yaml':
-        parser = yaml_load
-    else:
-        raise ValueError('Unsupported file format')
-    try:
-        return parser(content_file)
-    except (JSONDecodeError, ParserError):
-        raise ValueError('Data in file{s) does not match the format json/yaml')
+def parse(content_file, parser_type):
+    if parser_type == 'json':
+        return json_load(content_file)
+    if parser_type == 'yaml':
+        return yaml_load(content_file)
+    raise ValueError('Unsupported file format')
 
 
 def get_dict_from_file(path):
-    if path.endswith('.json'):
-        parse_type = 'json'
-    elif path.endswith('.yaml') or path.endswith('.yml'):
-        parse_type = 'yaml'
+    _, extension = splitext(path)
+    if extension == '.json':
+        parser_type = 'json'
+    elif extension == '.yaml' or extension == '.yml':
+        parser_type = 'yaml'
     else:
-        parse_type = 'other'
+        parser_type = 'other'
     with open(path) as content_file:
-        result_dict = parse(content_file, parse_type)
+        result_dict = parse(content_file, parser_type)
     return result_dict

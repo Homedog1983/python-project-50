@@ -7,11 +7,11 @@ TESTS_DIR = dirname(abspath(__file__))
 FIXTURES_PATH = f"{TESTS_DIR}/fixtures"
 
 
-def get_paths(*file_names):
-    return tuple(map(lambda name: f"{FIXTURES_PATH}/{name}", file_names))
+def get_fixture_path(file):
+    return f"{FIXTURES_PATH}/{file}"
 
 
-@pytest.mark.parametrize("name_1, name_2, format_name, name_expected", [
+@pytest.mark.parametrize("file1, file2, format, result", [
     # flat-json-json -> stylish
     ('file1.json', 'file2.json', 'stylish', 'flat_diff12.txt'),
     ('file2.json', 'file1.json', 'dfdf', 'flat_diff21.txt'),
@@ -29,15 +29,17 @@ def get_paths(*file_names):
     ('file1_n.json', 'file2_n.yaml', '', 'nested_12s.txt'),
     # nested -> plain
     ('file1_n.json', 'file2_n.json', 'plain', 'nested_12p.txt'),
-    # ('file1_n.yaml', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
-    # ('file1_n.json', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
+    ('file1_n.yaml', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
+    ('file1_n.json', 'file2_n.yaml', 'plain', 'nested_12p.txt'),
     # nested -> json
     ('file1_n.json', 'file2_n.json', 'json', 'nested_12j.txt'),
     ('file1_n.yaml', 'file2_n.yaml', 'json', 'nested_12j.txt'),
     ('file1_n.json', 'file2_n.yaml', 'json', 'nested_12j.txt')
 ])
-def test_get_nested_diff(name_1, name_2, format_name, name_expected):
-    path_1, path_2, path_expected = get_paths(name_1, name_2, name_expected)
-    with open(path_expected) as file_expected:
-        content_expected = file_expected.read()
-        assert get_nested_diff(path_1, path_2, format_name) == content_expected
+def test_get_nested_diff(file1, file2, format, result):
+    file1_path, file2_path, result_path = map(
+        get_fixture_path, (file1, file2, result))
+    with open(result_path) as result_file:
+        result_expected = result_file.read()
+        assert get_nested_diff(
+            file1_path, file2_path, format) == result_expected

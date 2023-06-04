@@ -1,9 +1,9 @@
 import pytest
 from gendiff.file_parser import get_dict_from_file
-from tests.test_generate_diff import get_paths
+from tests.test_generate_diff import get_fixture_path
 
 
-@pytest.mark.parametrize("name, name_expected", [
+@pytest.mark.parametrize("file, result", [
     ('file1.json', 'dict_1.txt'),
     ('file2.json', 'dict_2.txt'),
     ('file1.yml', 'dict_1.txt'),
@@ -13,22 +13,20 @@ from tests.test_generate_diff import get_paths
     ('file2.yml', 'dict_2.txt'),
     ('file1.yaml', 'dict_1.txt'),
 ])
-def test_get_dict_from_file(name, name_expected):
-    path, path_expected = get_paths(name, name_expected)
-    with open(path_expected) as file_expected:
-        content_expected = eval(file_expected.read())
-        assert get_dict_from_file(path) == content_expected
+def test_get_dict_from_file(file, result):
+    file_path, result_path = map(get_fixture_path, (file, result))
+    with open(result_path) as result_file:
+        result_expected = eval(result_file.read())
+        assert get_dict_from_file(file_path) == result_expected
 
 
-@pytest.mark.parametrize("name, name_expected", [
-    ('wrong_data.json', 'wrong_data_message.txt'),
-    ('wrong_data.yaml', 'wrong_data_message.txt'),
+@pytest.mark.parametrize("file, result", [
     ('wrong.txt', 'wrong_format_message.txt'),
 ])
-def test_exception(name, name_expected):
-    path, path_expected = get_paths(name, name_expected)
-    with open(path_expected) as file_expected:
-        content_expected = file_expected.read()
+def test_exception(file, result):
+    file_path, result_path = map(get_fixture_path, (file, result))
+    with open(result_path) as result_file:
+        result_expected = result_file.read()
     with pytest.raises(Exception) as e:
-        get_dict_from_file(path)
-    assert str(e.value) == content_expected
+        get_dict_from_file(file_path)
+    assert str(e.value) == result_expected
