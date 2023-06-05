@@ -30,8 +30,8 @@ def get_diff_from_dicts(dict1, dict2, node_key=''):
     return make_node(node_key, 'parent', children=children)
 
 
-def get_nested_diff(path1, path2, format_name='stylish'):
+def get_nested_diff(path1, path2, format_type):
     dict1 = get_dict_from_file(path1)
     dict2 = get_dict_from_file(path2)
     diff_tree = get_diff_from_dicts(dict1, dict2)
-    return get_view_from(diff_tree, format_name)
+    return get_view_from(diff_tree, format_type)

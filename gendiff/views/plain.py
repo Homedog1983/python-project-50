@@ -13,9 +13,9 @@ def to_str(data):
     return data
 
 
-def get_lines_from(tree, path=''):
+def stringify(tree, path=''):
     lines = []
-    children = get_properties_from(tree, 'children')
+    (children,) = get_properties_from(tree, 'children')
     for node in children:
         key, status, data = get_properties_from(node, 'key', 'status', 'data')
         next_path = f"{path}.{key}"
@@ -34,9 +34,5 @@ def get_lines_from(tree, path=''):
             lines.append(
                 f'{line_start} updated. From {value_was} to {value_is}')
             continue
-        lines.extend(get_lines_from(node, next_path))
-    return lines
-
-
-def stringify(tree):
-    return '\n'.join(get_lines_from(tree))
+        lines.append(stringify(node, next_path))
+    return '\n'.join(lines)

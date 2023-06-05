@@ -33,7 +33,7 @@ def get_indents(level, replacer=' ', replacer_per_level=4):
 def get_lines_from_elem(sign, key, data, level):
     lines = []
     sign_indent, bracket_indent = get_indents(level)
-    line_start = f"{sign_indent}{sign} {to_str(key)}: "
+    line_start = f"{sign_indent}{sign} {key}: "
     if not isinstance(data, dict):
         lines.append(line_start + f"{to_str(data)}")
     else:
@@ -46,60 +46,24 @@ def get_lines_from_elem(sign, key, data, level):
     return lines
 
 
-def get_lines_from(tree, level=0):
+def stringify(tree, level=0):
     lines = []
     key, children = get_properties_from(tree, 'key', 'children')
     _, bracket_indent = get_indents(level)
-    lines.append(f"{bracket_indent}{to_str(key)}: " * int(bool(level)) + "{")
-    level += 1
+    level_factor = 1 if level > 0 else 0
+    lines.append(f"{bracket_indent}{key}: " * level_factor + "{")
     for node in children:
         key, status, data = get_properties_from(node, 'key', 'status', 'data')
         sign = get_sign_from(status)
         if status == 'parent':
-            lines.extend(get_lines_from(node, level))
+            lines.append(stringify(node, level + 1))
             continue
         if status == 'updated':
             lines.extend(
-                get_lines_from_elem(sign['was'], key, data['was'], level))
+                get_lines_from_elem(sign['was'], key, data['was'], level + 1))
             lines.extend(
-                get_lines_from_elem(sign['is'], key, data['is'], level))
+                get_lines_from_elem(sign['is'], key, data['is'], level + 1))
             continue
-        lines.extend(get_lines_from_elem(sign, key, data, level))
+        lines.extend(get_lines_from_elem(sign, key, data, level + 1))
     lines.append(f"{bracket_indent}" + '}')
-    return lines
-
-
-def stringify(tree):
-    return '\n'.join(get_lines_from(tree))
-
-
-# v 0.9.1 + append/extend
-#
-# def get_lines_from(tree, level=0):
-#     lines = []
-#     children = get_from(tree, 'children')
-#     level += 1
-#     for node in children:
-#         key, status, data = get_from(node, 'key', 'status', 'data')
-#         sign = get_sign_from(status)
-#         if status == 'parent':
-#             _, bracket_indent = get_indents(level)
-#             lines.append(f"{bracket_indent}{to_str(key)}: " + "{")
-#             lines.extend(get_lines_from(node, level))
-#             lines.append(f"{bracket_indent}" + '}')
-#             continue
-#         if status == 'updated':
-#             lines.extend(
-#                 get_lines_from_elem(sign['was'], key, data['was'], level))
-#             lines.extend(
-#                 get_lines_from_elem(sign['is'], key, data['is'], level))
-#             continue
-#         lines.extend(get_lines_from_elem(sign, key, data, level))
-#     return lines
-#
-#
-# def stringify(tree):
-#     lines = ['{']
-#     lines.extend(get_lines_from(tree))
-#     lines.append('}')
-#     return '\n'.join(lines)
+    return '\n'.join(lines)
