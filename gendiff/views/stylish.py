@@ -1,14 +1,6 @@
 from gendiff.diff_abstraction import get_properties_from
 
 
-def to_str(value):
-    if value is None:
-        return 'null'
-    if isinstance(value, bool):
-        return str(value).lower()
-    return str(value)
-
-
 def get_sign_from(status):
     signs = {
         'unchanged': ' ',
@@ -23,47 +15,49 @@ def get_sign_from(status):
     return signs.get(status, ' ')
 
 
-def get_indents(level, replacer=' ', replacer_per_level=4):
-    signs_to_key = replacer_per_level * level
-    indent_to_bracket = replacer * signs_to_key
-    indent_to_sign = replacer * (signs_to_key - 2)
-    return indent_to_sign, indent_to_bracket
+def sign_indent(lvl, replacer=' ', replacer_per_lvl=4):
+    return replacer * (replacer_per_lvl * lvl - 2)
 
 
-def get_lines_from_elem(sign, key, data, level):
-    lines = []
-    sign_indent, bracket_indent = get_indents(level)
-    line_start = f"{sign_indent}{sign} {key}: "
-    if not isinstance(data, dict):
-        lines.append(line_start + f"{to_str(data)}")
-    else:
-        lines.append(line_start + "{")
+def bracket_indent(lvl, replacer=' ', replacer_per_lvl=4):
+    return replacer * (replacer_per_lvl * lvl)
+
+
+def to_str(data, lvl=0):
+    if isinstance(data, dict):
+        lines = ['{']
         sign = get_sign_from('unchanged')
+        indent = sign_indent(lvl + 1)
         for sub_key, sub_data in data.items():
-            lines.extend(
-                get_lines_from_elem(sign, sub_key, sub_data, level + 1))
-        lines.append(f"{bracket_indent}" + '}')
-    return lines
+            lines.append(
+                f"{indent}{sign} {sub_key}: {to_str(sub_data, lvl + 1)}")
+        lines.append(f"{bracket_indent(lvl)}" + '}')
+        return '\n'.join(lines)
+    if data is None:
+        return 'null'
+    if isinstance(data, bool):
+        return str(data).lower()
+    return str(data)
 
 
-def stringify(tree, level=0):
+def stringify(tree, lvl=0):
     lines = []
     key, children = get_properties_from(tree, 'key', 'children')
-    _, bracket_indent = get_indents(level)
-    level_factor = 1 if level > 0 else 0
-    lines.append(f"{bracket_indent}{key}: " * level_factor + "{")
+    lvl_factor = 1 if lvl > 0 else 0
+    lines.append(f"{bracket_indent(lvl)}{key}: " * lvl_factor + "{")
+    indent = sign_indent(lvl + 1)
     for node in children:
         key, status, data = get_properties_from(node, 'key', 'status', 'data')
         sign = get_sign_from(status)
         if status == 'parent':
-            lines.append(stringify(node, level + 1))
+            lines.append(stringify(node, lvl + 1))
             continue
         if status == 'updated':
-            lines.extend(
-                get_lines_from_elem(sign['was'], key, data['was'], level + 1))
-            lines.extend(
-                get_lines_from_elem(sign['is'], key, data['is'], level + 1))
+            lines.append(
+                f"{indent}{sign['was']} {key}: {to_str(data['was'], lvl + 1)}")
+            lines.append(
+                f"{indent}{sign['is']} {key}: {to_str(data['is'], lvl + 1)}")
             continue
-        lines.extend(get_lines_from_elem(sign, key, data, level + 1))
-    lines.append(f"{bracket_indent}" + '}')
+        lines.append(f"{indent}{sign} {key}: {to_str(data, lvl + 1)}")
+    lines.append(f"{bracket_indent(lvl)}" + '}')
     return '\n'.join(lines)
